@@ -17,8 +17,6 @@ module tt_um_uwasic_onboarding_hala_ali (
 );
 
   // All output pins must be assigned. If not used, assign to 0.
-  assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
-  assign uio_out = 0;
   assign uio_oe  = 8'hFF;
 
   wire [7:0] en_reg_out_7_0;
@@ -42,7 +40,7 @@ module tt_um_uwasic_onboarding_hala_ali (
   wire _unused = &{ena, ui_in[7:3], uio_in, 1'b0};
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, clk, rst_n, 1'b0};
+
 
 //instantiate SPI module
 

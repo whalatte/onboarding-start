@@ -54,26 +54,34 @@ always @(posedge clk)
         prev_ncs <= s_ncs;
 
 
-        if (!prev_sclk && s_sclk && !s_ncs && (count < 16)) begin//now we need to see if theres a rising edge for sclk
+        if (prev_ncs && !s_ncs) begin //start fresh for a new transaction when falling edge detected
+            store <= 0;
+            count <= 0;
+        end
 
-            store <= {store[14:0], s_copi};
-            count <= count + 1'b1;
+        else if (!s_ncs && !prev_sclk && s_sclk && (count < 16)) begin// see if theres a rising edge for sclk. store bits while nCS is low
+
+                store <= {store[14:0], s_copi};
+                count <= count + 1'b1;
+                
+        end 
             
-        end elseif (count == 16) begin
+        else if ((count == 16) && !prev_ncs && s_ncs && store[15]) begin //nCS is high, transaction finished, update registers now.
 
-                case (store [14:8])
+                    case (store [14:8])
                 default: begin end
-               7'h00: en_reg_out_7_0  <= store[7:0];
-               7'h01: en_reg_out_15_8 <= store[7:0];
-               7'h02: en_reg_pwm_7_0  <= store[7:0];
-               7'h03: en_reg_pwm_15_8 <= store[7:0];
-               7'h04: pwm_duty_cycle <= store[7:0];
+                7'h00: en_reg_out_7_0  <= store[7:0];
+                7'h01: en_reg_out_15_8 <= store[7:0];
+                7'h02: en_reg_pwm_7_0  <= store[7:0];
+                7'h03: en_reg_pwm_15_8 <= store[7:0];
+                7'h04: pwm_duty_cycle <= store[7:0];
 
-                endcase
+                    endcase
 
-            end
+         end
 
-    end 
+        end 
+
 
 
 endmodule
