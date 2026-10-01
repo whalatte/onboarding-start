@@ -45,4 +45,14 @@ module tt_um_uwasic_onboarding_hala_ali (
   wire _unused = &{ena, clk, rst_n, 1'b0};
 
 //instantiate SPI module
+
+spi_peripheral spi_peripheral_inst (.ui_in(ui_in),
+.clk(clk),
+.rst_n(rst_n),
+
+.en_reg_out_7_0(en_reg_out_7_0),
+.en_reg_out_15_8(en_reg_out_15_8),
+.en_reg_pwm_7_0(en_reg_pwm_7_0),
+.en_reg_pwm_15_8(en_reg_pwm_15_8),
+.pwm_duty_cycle(pwm_duty_cycle));
 endmodule
